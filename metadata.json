@@ -1,0 +1,6 @@
+{
+  "name": "Casa de Deus - CRM",
+  "description": "Sistema de gestão e acompanhamento pastoral e ministerial para a igreja Casa de Deus (Recreio, Curicica e Guaratiba).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

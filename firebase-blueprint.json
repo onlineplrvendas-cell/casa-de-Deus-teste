@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Church team member profile with congregation assignments and role",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 150 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["admin", "equipe"] },
+        "assignedCongregations": { "type": "string", "maxLength": 200 },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email", "role", "active"]
+    },
+    "Contact": {
+      "title": "Contact",
+      "description": "Church person/member record belonging to a specific congregation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 150 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "normalizedPhone": { "type": "string", "maxLength": 25 },
+        "email": { "type": "string", "maxLength": 150 },
+        "neighborhood": { "type": "string", "maxLength": 100 },
+        "congregation": { "type": "string", "enum": ["Recreio", "Curicica", "Guaratiba"] },
+        "category": { "type": "string", "enum": ["Novo contato", "Visitante", "Membro"] },
+        "stage": { "type": "string", "enum": ["Aguardando primeiro contato", "1º contato feito", "Em acompanhamento", "Integrado", "Acompanhamento pausado"] },
+        "source": { "type": "string", "enum": ["Culto", "Indicação", "Instagram", "Site", "Evento", "Outro"] },
+        "assignedToId": { "type": "string", "maxLength": 128 },
+        "assignedToName": { "type": "string", "maxLength": 150 },
+        "firstVisitDate": { "type": "string", "maxLength": 30 },
+        "memberSinceDate": { "type": "string", "maxLength": 30 },
+        "initialNotes": { "type": "string", "maxLength": 2000 },
+        "isArchived": { "type": "boolean" },
+        "archivedAt": { "type": "string", "maxLength": 40 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "phone", "congregation", "category", "stage"]
+    },
+    "Interaction": {
+      "title": "Interaction",
+      "description": "Pastoral care log or communication entry with a contact",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "contactId": { "type": "string", "maxLength": 128 },
+        "congregation": { "type": "string", "enum": ["Recreio", "Curicica", "Guaratiba"] },
+        "channel": { "type": "string", "enum": ["WhatsApp", "Ligação", "Presencial", "Outro"] },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "userName": { "type": "string", "maxLength": 150 },
+        "stageAtInteraction": { "type": "string", "maxLength": 100 },
+        "date": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["contactId", "channel", "notes", "userId", "congregation"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Follow-up task or scheduled return for a contact",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "contactId": { "type": "string", "maxLength": 128 },
+        "contactName": { "type": "string", "maxLength": 150 },
+        "congregation": { "type": "string", "enum": ["Recreio", "Curicica", "Guaratiba"] },
+        "description": { "type": "string", "maxLength": 500 },
+        "assignedToId": { "type": "string", "maxLength": 128 },
+        "assignedToName": { "type": "string", "maxLength": 150 },
+        "dueDate": { "type": "string", "maxLength": 30 },
+        "status": { "type": "string", "enum": ["pending", "completed"] },
+        "completedAt": { "type": "string", "maxLength": 40 },
+        "completedBy": { "type": "string", "maxLength": 128 },
+        "createdById": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["contactId", "contactName", "congregation", "description", "dueDate", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles and church staff authorization"
+    },
+    "/contacts/{contactId}": {
+      "schema": { "$ref": "#/entities/Contact" },
+      "description": "Church contacts and member records"
+    },
+    "/interactions/{interactionId}": {
+      "schema": { "$ref": "#/entities/Interaction" },
+      "description": "Interaction and conversation log history"
+    },
+    "/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/Task" },
+      "description": "Follow-up schedule and pending returns"
+    }
+  }
+}
